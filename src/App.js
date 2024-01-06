@@ -9,6 +9,7 @@ import Contact from "./PAGES/Extra/Contact";
 import Login from "./PAGES/Auth/Login";
 import Signup from "./PAGES/Auth/Signup";
 import ForgotPassword from "./PAGES/Auth/ForgotPassword";
+import Cart from "./PAGES/Cart/Cart";
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </BrowserRouter>

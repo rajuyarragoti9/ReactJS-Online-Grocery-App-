@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Footer1 from "../../COMPONENTS/Footer/Footer1";
-import Footer2 from "../../COMPONENTS/Footer/Footer2";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import img1 from "../../ASSETS/Images/1.png";
 import img2 from "../../ASSETS/Images/2.png";
 import img3 from "../../ASSETS/Images/3.png";
 import img4 from "../../ASSETS/Images/4.png";
+import Footer1 from "../../COMPONENTS/Footer/Footer1";
+import Footer2 from "../../COMPONENTS/Footer/Footer2";
 import Navbar from "../../COMPONENTS/Navbar/Navbar";
 import ProductsSlider from "../../COMPONENTS/Product/ProductsSlider";
 import "./ProductPage.css";
@@ -16,6 +18,7 @@ const ProductPage = () => {
   const [activeimg, setactiveimg] = React.useState({});
   const [count, setcount] = React.useState(1);
   const [showreview, setshowreview] = React.useState(false);
+
   const getproductdatabyid = async () => {
     let temp = {
       Code: 200,
@@ -25,7 +28,7 @@ const ProductPage = () => {
           ProductId: 1,
           ProductName: "Product 1",
           ProductDescription:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
           ProductImage: [
             {
               id: 1,
@@ -108,9 +111,11 @@ const ProductPage = () => {
 
   useEffect(() => {
     getproductdatabyid();
-    window.scroll(0, 0); //the page position went to top when page is opened
+    window.scroll(0, 0);
   }, []);
+
   const [rating, setrating] = React.useState(0);
+
   const products = [
     {
       id: 1,
@@ -193,6 +198,52 @@ const ProductPage = () => {
       discountprecent: 12,
     },
   ];
+  const [reloadnavbar, setreloadnavbar] = React.useState(false);
+  const addtocart = () => {
+    let cart = JSON.parse(localStorage.getItem("cart"));
+
+    if (cart) {
+      // alert('1 item is already added to cart')
+      let itemincart = cart.find(
+        (item) => item.productdata.ProductId === productdata.ProductId
+      );
+      if (itemincart) {
+        cart = cart.map((item) => {
+          if (item.productdata.ProductId === productdata.ProductId) {
+            return {
+              ...item,
+              quantity: item.quantity + count,
+            };
+          } else {
+            return item;
+          }
+        });
+        localStorage.setItem("cart", JSON.stringify(cart));
+      } else {
+        cart = [
+          ...cart,
+          {
+            productdata,
+            quantity: count,
+          },
+        ];
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+    } else {
+      cart = [
+        {
+          productdata,
+          quantity: count,
+        },
+      ];
+
+      // console.log(cart)
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+    setreloadnavbar(!reloadnavbar);
+    // window.location.reload()
+    toast.success("Item added to cart");
+  };
   return (
     <div className="productpage">
       {/* <h1>Product id is - {prodid}</h1>
@@ -200,7 +251,7 @@ const ProductPage = () => {
                 {JSON.stringify(productdata)}
             </p> */}
 
-      <Navbar />
+      <Navbar reloadnavbar={reloadnavbar} />
 
       <div className="pc1">
         <Link to="/">
@@ -282,7 +333,7 @@ const ProductPage = () => {
           <div className="btncont">
             <button
               onClick={() => {
-                alert("Added to cart");
+                addtocart();
               }}
             >
               Add to Cart
@@ -355,6 +406,7 @@ const ProductPage = () => {
                 <label htmlFor="">Review</label>
                 <textarea name="" id="" cols="30" rows="10"></textarea>
               </div>
+
               <div className="fromgroup">
                 <label htmlFor="">Rating</label>
                 <div className="rating">
@@ -551,6 +603,7 @@ const ProductPage = () => {
                   </div>
                 </div>
               </div>
+
               <button>Submit</button>
             </form>
 
@@ -743,6 +796,7 @@ const ProductPage = () => {
           <p className="desc">{productdata.ProductDescription}</p>
         )}
       </div>
+
       <div className="slidercont">
         <ProductsSlider products={products} categoryname="Related Products" />
       </div>

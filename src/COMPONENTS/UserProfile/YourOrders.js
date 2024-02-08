@@ -4,6 +4,7 @@ import OrderSuccessful from '../Order/OrderSucessfull'
 import { useRecoilState } from 'recoil'
 import { orderSuccessfulProvider } from '../../Providers/OrderSuccessfulProvider'
 
+
 const YourOrders = () => {
 
     const data = [
@@ -62,9 +63,9 @@ const YourOrders = () => {
         <div className='yourorders'>
             <h1 className='mainhead1'>Your Orders</h1>
             {
-                ordersuccesscont && <OrderSuccessful orderid={selectedorderid} message={`Order ID: ${selectedorderid}`}/>
+                ordersuccesscont && <OrderSuccessful orderid={selectedorderid} message={`Order ID: ${selectedorderid}`} />
             }
-            <table>
+            <table className='yourorderstable'>
                 <thead>
                     <tr>
                         <th scope='col'>Oder ID</th>
@@ -82,11 +83,12 @@ const YourOrders = () => {
                                 <td data-label='OrderID'>{item.id}</td>
                                 <td data-label='OrderDate'>{item.date}</td>
                                 <td data-label='Delivery Status'>
-                                    <p>
+                                    <div>
                                         {item.status == 'Delivered' && <span className='greendot'></span>}
                                         {item.status == 'On the way' && <span className='yellowdot'></span>}
                                         {item.status == 'Cancelled' && <span className='reddot'></span>}
-                                        {item.status}</p>
+                                        {item.status}
+                                    </div>
                                 </td>
                                 <td data-label='Total'>${item.total}</td>
                                 <td data-label='Invoice'>

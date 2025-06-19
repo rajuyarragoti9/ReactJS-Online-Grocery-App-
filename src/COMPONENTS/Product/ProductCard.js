@@ -99,7 +99,7 @@ const ProductCard = ({ data }) => {
         </div>
       ) : (
         <div className="addbtn">
-          <Link to={`/product/${data.id}`}>
+          <Link to={`/product/${data.ProductId}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
